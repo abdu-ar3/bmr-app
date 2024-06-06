@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,8 +21,12 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('user')->name('user.')->group(function(){
         Route::resource('booking', BookingController::class)->middleware('role:user');
-        Route::get('/booking/{room}', [BookingController::class, 'show'])->name('rooms.show');
+        Route::resource('room', RoomController::class)->middleware('role:user');
+        Route::post('/rooms/{room}/book', [RoomController::class, 'book'])->name('rooms.book');
     });
+    Route::get('/booking/{room}', [RoomController::class, 'show'])->name('rooms.show');
+    
+
 });
 
 require __DIR__.'/auth.php';

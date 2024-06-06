@@ -32,6 +32,8 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         //
+        // dd('Test');
+        
     }
 
     /**
@@ -40,6 +42,8 @@ class BookingController extends Controller
     public function show(Booking $booking)
     {
         //
+        dd('Test');
+    
     }
 
     /**

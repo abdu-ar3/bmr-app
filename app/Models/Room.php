@@ -20,4 +20,9 @@ class Room extends Model
     {
         return $this->bookings()->where('status', 'booked')->exists();
     }
+
+    public function isCurrentlyBooked()
+    {
+        return $this->bookings()->where('status', 'booked')->exists();
+    }
 }

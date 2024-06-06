@@ -12,7 +12,7 @@
         <div
             class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             @foreach ($rooms as $room)
-            <a href="{{ route('user.rooms.show', $room) }}"
+            <a href="{{ route('rooms.show', ['room' => $room->id]) }}"
                 class="card bg-white p-5 rounded-lg shadow-md hover:bg-gray-100 transition">
                 <div class="item-card flex flex-col gap-y-3">
                     <div class="flex flex-row items-center gap-x-3">
