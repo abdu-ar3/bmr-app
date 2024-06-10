@@ -11,6 +11,12 @@ class Room extends Model
 
     protected $fillable = ['name', 'location', 'capacity'];
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+
     public function bookings()
     {
         return $this->hasMany(Booking::class);
