@@ -11,6 +11,11 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = ['user_id', 'room_id', 'start_time', 'end_time', 'status'];
+    
+    public function key()
+    {
+        return $this->hasOne(Key::class, 'room_id', 'room_id');
+    }
 
     public function room()
     {

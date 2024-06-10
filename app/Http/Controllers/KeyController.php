@@ -13,6 +13,12 @@ class KeyController extends Controller
     public function index()
     {
         //
+        $keys = Key::with(['room', 'room.bookings.user'])->get();
+        $availableKeys = $keys->where('status', 'available');
+        $takenKeys = $keys->where('status', 'taken');
+
+        return view('user.key.index', compact('availableKeys', 'takenKeys'));
+
     }
 
     /**
@@ -61,5 +67,37 @@ class KeyController extends Controller
     public function destroy(Key $key)
     {
         //
+    }
+
+    public function takeKey(Request $request, Key $key)
+    {
+
+        if ($key->room->bookings->first()->user->id == auth()->id()) {
+            $key->status = 'taken';
+            $key->taken_at = now();
+            $key->save();
+
+            return redirect()->back()->with('status', 'Key taken successfully.');
+        }
+
+        return redirect()->back()->with('error', 'You are not authorized to take this key.');
+    }
+
+    public function returnKey(Request $request, Key $key)
+    {
+        // Ensure the authenticated user is the one who booked the room
+        // Ensure the authenticated user is the one who booked the room
+        $booking = $key->room->bookings->first();
+        if ($booking->user_id == auth()->id()) {
+            // Delete the key
+            $key->delete();
+            
+            // Delete the associated booking
+            $booking->delete();
+
+            return redirect()->route('user.booking.index')->with('status', 'Key and booking deleted successfully.');
+        }
+
+        return redirect()->back()->with('error', 'You are not authorized to return this key.');
     }
 }

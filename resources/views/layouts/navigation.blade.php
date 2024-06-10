@@ -22,6 +22,12 @@
                         {{ __('Booking Room') }}
                     </x-nav-link>
                 </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('user.key.index')" :active="request()->routeIs('user.key.index')">
+                        {{ __('Key Room') }}
+                    </x-nav-link>
+                </div>
                 @endrole
             </div>
 

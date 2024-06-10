@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\KeyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +23,13 @@ Route::middleware('auth')->group(function () {
     Route::prefix('user')->name('user.')->group(function(){
         Route::resource('booking', BookingController::class)->middleware('role:user');
         Route::resource('room', RoomController::class)->middleware('role:user');
+        Route::resource('key', KeyController::class)->middleware('role:user');
         Route::post('/rooms/{room}/book', [RoomController::class, 'book'])->name('rooms.book');
+
+        // Route untuk mengubah status kunci
+        Route::post('/key-room/{key}/take', [KeyController::class, 'takeKey'])->name('keyRoom.takeKey');
+        Route::post('/return/{key}', [KeyController::class, 'returnKey'])->name('returnKey');
+
     });
     Route::get('/booking/{room}', [RoomController::class, 'show'])->name('rooms.show');
     
