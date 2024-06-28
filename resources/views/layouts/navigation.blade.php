@@ -16,6 +16,13 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('category.index')" :active="request()->routeIs('category.index')">
+                        {{ __('Category Room') }}
+                    </x-nav-link>
+                </div>
+
                 @role('user')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('user.booking.index')" :active="request()->routeIs('user.booking.index')">
@@ -29,6 +36,8 @@
                     </x-nav-link>
                 </div>
                 @endrole
+
+
             </div>
 
             <!-- Settings Dropdown -->

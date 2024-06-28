@@ -43,13 +43,19 @@ class RoomController extends Controller
 
         $room = Room::findOrFail($request->room_id);
 
-        if ($room->isCurrentlyBooked()) {
-            return redirect()->back()->with('error', 'Room is already booked.');
+        // Check if the room is booked during the requested time
+        $startDate = Carbon::parse($request->start_time)->format('Y-m-d');
+        $startClock = Carbon::parse($request->start_clock)->format('H:i:s');
+        $endDate = Carbon::parse($request->end_time)->format('Y-m-d');
+        $endClock = Carbon::parse($request->end_clock)->format('H:i:s');
+
+        if ($room->isBookedDuring($startDate, $startClock, $endDate, $endClock)) {
+            return redirect()->back()->with('error', 'Room is already booked during the selected time.');
         }
 
         $booking = new Booking();
         $booking->room_id = $room->id;
-        $booking->user_id = auth()->user()->id;
+        $booking->user_id = auth()->user()->id; // Assuming using Laravel authentication
         $booking->start_time = $request->start_time;
         $booking->start_clock = $request->start_clock;
         $booking->end_time = $request->end_time;
@@ -58,6 +64,7 @@ class RoomController extends Controller
 
         $booking->save();
 
+        
         return redirect()->route('rooms.show', $room->id)->with('success', 'Room booked successfully.');
     }
 

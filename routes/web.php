@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\KeyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
@@ -32,7 +33,7 @@ Route::middleware('auth')->group(function () {
 
     });
     Route::get('/booking/{room}', [RoomController::class, 'show'])->name('rooms.show');
-    
+    Route::resource('category', CategoryController::class);
 
 });
 

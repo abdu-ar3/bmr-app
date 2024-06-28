@@ -12,7 +12,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        // dd('Test');
+        $categories = Category::with('rooms')->get();
+        return view('category.index', compact('categories'));
     }
 
     /**

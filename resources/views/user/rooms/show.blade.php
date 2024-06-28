@@ -31,29 +31,49 @@
                             <span class="text-green-500">Available</span>
                             @endif
                         </p>
-                        @if (!$room->isCurrentlyBooked())
+                        <form method="GET" action="{{ route('rooms.show', ['room' => $room->id]) }}">
+                            <div class="flex flex-col gap-y-2">
+                                <label for="start_time">Pilih Tanggal Mulai:</label>
+                                <input type="date" id="start_time" name="start_time"
+                                    value="{{ request('start_time') }}">
+                            </div>
+                            <div class="flex flex-col gap-y-2">
+                                <label for="start_clock">Pilih Jam Mulai:</label>
+                                <input type="time" id="start_clock" name="start_clock"
+                                    value="{{ request('start_clock') }}">
+                            </div>
+                            <div class="flex flex-col gap-y-2">
+                                <label for="end_time">Pilih Tanggal Selesai:</label>
+                                <input type="date" id="end_time" name="end_time" value="{{ request('end_time') }}">
+                            </div>
+                            <div class="flex flex-col gap-y-2">
+                                <label for="end_clock">Pilih Jam Selesai:</label>
+                                <input type="time" id="end_clock" name="end_clock" value="{{ request('end_clock') }}">
+                            </div>
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Cek
+                                Ketersediaan</button>
+                        </form>
+
+                        @if (request('start_time') && request('start_clock') && request('end_time') &&
+                        request('end_clock'))
+                        @if (!$room->isBookedDuring(request('start_time'), request('start_clock'),
+                        request('end_time'),
+                        request('end_clock')))
                         <form method="POST" action="{{ route('user.room.store') }}">
                             @csrf
-                            <div class="flex flex-col gap-y-2">
-                                <label for="start_time">Start Date:</label>
-                                <input type="date" id="start_time" name="start_time" required>
-                            </div>
-                            <div class="flex flex-col gap-y-2">
-                                <label for="start_clock">Start Time:</label>
-                                <input type="time" id="start_clock" name="start_clock" required>
-                            </div>
-                            <div class="flex flex-col gap-y-2">
-                                <label for="end_time">End Date:</label>
-                                <input type="date" id="end_time" name="end_time" required>
-                            </div>
-                            <div class="flex flex-col gap-y-2">
-                                <label for="end_clock">End Time:</label>
-                                <input type="time" id="end_clock" name="end_clock" required>
-                            </div>
+                            <input type="hidden" name="start_time" value="{{ request('start_time') }}">
+                            <input type="hidden" name="start_clock" value="{{ request('start_clock') }}">
+                            <input type="hidden" name="end_time" value="{{ request('end_time') }}">
+                            <input type="hidden" name="end_clock" value="{{ request('end_clock') }}">
                             <input type="hidden" name="room_id" value="{{ $room->id }}">
                             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Book
                                 Room</button>
                         </form>
+                        @else
+                        <div class="py-3 w-full rounded-3xl bg-yellow-500 text-white mt-4">
+                            Ruangan sudah dibooking untuk waktu yang dipilih.
+                        </div>
+                        @endif
                         @endif
                     </div>
                 </div>
@@ -82,4 +102,20 @@
             </div>
         </div>
     </div>
+
+
+    {{-- <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (event) {
+        const startTime = document.querySelector('#start_time').value;
+        const startClock = document.querySelector('#start_clock').value;
+        const endTime = document.querySelector('#end_time').value;
+        const endClock = document.querySelector('#end_clock').value;
+        
+        const start = new Date(`${startTime}T${startClock}`);
+        const end = new Date(`${endTime}T${endClock}`);
+        
+        if (end <= start) { event.preventDefault(); alert('End time must be after start time.'); } }); });
+    </script> --}}
 </x-app-layout>
